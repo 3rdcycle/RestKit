@@ -92,6 +92,11 @@ static RKRequestDescriptor *RKRequestDescriptorFromArrayMatchingObjectAndRequest
 
 extern NSString *RKStringDescribingRequestMethod(RKRequestMethod method);
 
+// make baseUrl writable
+@interface AFHTTPClient ()
+@property (nonatomic, strong, readwrite) baseUrl;
+@end
+
 @interface RKObjectParameters : NSObject
 
 @property (nonatomic, strong) NSMutableDictionary *parameters;
@@ -381,6 +386,15 @@ static NSString *RKMIMETypeFromAFHTTPClientParameterEncoding(AFHTTPClientParamet
 {
     return self.HTTPClient.baseURL;
 }
+
+- (void)setBaseURL:(NSURL *)baseURL
+{
+    for (RKResponseDescriptor *responseDescriptor in self.responseDescriptors) {
+        responseDescriptor.baseURL = baseURL;
+    }
+    self.HTTPClient.baseURL = baseURL;
+}
+
 
 - (NSDictionary *)defaultHeaders
 {
