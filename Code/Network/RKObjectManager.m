@@ -94,7 +94,7 @@ extern NSString *RKStringDescribingRequestMethod(RKRequestMethod method);
 
 // make baseUrl writable
 @interface AFHTTPClient ()
-@property (nonatomic, strong, readwrite) baseUrl;
+@property (nonatomic, strong, readwrite) NSURL *baseURL;
 @end
 
 @interface RKObjectParameters : NSObject
