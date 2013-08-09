@@ -22,7 +22,19 @@
 #import "RKEntityMapping.h"
 #import "RKManagedObjectCaching.h"
 
+/**
+ RestKit provides the RKManagedObjectStore as a convenience class to handle your entire CoreData stack.
+ If you prefer to have your own class to handle the stack, make sure it conforms to the RKManagedObjectStoreManager
+ protocol so that RestKit can access the stack components it needs to operate.
+ */
+@protocol RKManagedObjectStoreManager <NSObject>
+@property (nonatomic, strong) id<RKManagedObjectCaching> managedObjectCache;
+@property (nonatomic, strong, readonly) NSManagedObjectContext *mainQueueManagedObjectContext;
+@end
+
+
 @class RKManagedObjectStore;
+
 
 /**
  The `RKManagedObjectStore` class encapsulates a Core Data stack including a managed object model, a persistent store coordinator, and a set of managed object contexts. The managed object store simplifies the task of properly setting up a Core Data stack and provides some additional functionality, such as the use of a seed database to initialize a SQLite backed persistent store and a simple code path for resetting the store by destroying and recreating the persistent stores.
@@ -39,7 +51,7 @@
 
  It is also worth noting that because of the parent/child context hierarchy, objects created on the main thread will not obtain permanent managed object ID's even after the primary context has been saved. If you need to refer to the permanent representations of objects created on the main thread after a save, you may ask the main queue context to obtain permanent managed objects for your objects via `obtainPermanentIDsForObjects:error:`. Be warned that when obtaining permanent managed object ID's, you must include all newly created objects that are reachable from the object you are concerned with in the set of objects provided to `obtainPermanentIDsForObjects:error:`. This means any newly created object in a one-to-one or one-to-many relationship must be provided or you will face a crash from the managed object context. This is due to a bug in Core Data still present in iOS5, but fixed in iOS6 (see Open Radar http://openradar.appspot.com/11478919).
  */
-@interface RKManagedObjectStore : NSObject
+@interface RKManagedObjectStore : NSObject <RKManagedObjectStoreManager>
 
 ///-----------------------------------------
 /// @name Accessing the Default Object Store

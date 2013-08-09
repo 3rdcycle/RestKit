@@ -24,9 +24,10 @@
 #import "RKMacros.h"
 #import "AFNetworking.h"
 #import "RKManagedObjectRequestOperation.h"
+#import "RKManagedObjectStore.h"
 
 @protocol RKSerialization;
-@class RKManagedObjectStore, RKObjectRequestOperation, RKManagedObjectRequestOperation,
+@class RKObjectRequestOperation, RKManagedObjectRequestOperation,
 RKMappingResult, RKRequestDescriptor, RKResponseDescriptor;
 
 /**
@@ -820,7 +821,7 @@ RKMappingResult, RKRequestDescriptor, RKResponseDescriptor;
 /**
  A Core Data backed object store for persisting objects that have been fetched from the Web
  */
-@property (nonatomic, strong) RKManagedObjectStore *managedObjectStore;
+@property (nonatomic, strong) id<RKManagedObjectStoreManager> managedObjectStore;
 
 /**
  An array of `RKFetchRequestBlock` blocks used to map `NSURL` objects into corresponding `NSFetchRequest` objects.
